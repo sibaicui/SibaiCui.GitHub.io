@@ -1,0 +1,1 @@
+    window.onload = function 窗口加载() { }
