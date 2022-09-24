@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <!-- <meta http-equiv="refresh" content="30"> -->
+    <!-- 每隔 30 秒刷新一次文档 -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- 规定文档的字符编码 -->
+    <meta http-equiv="Content-Language" content="zh-CN" />
+    <!-- 语言中文，中国版本 -->
+    <meta name="Author" content="伺佰" />
+    <!-- 作者的名字 -->
+    <meta name="Copyright" content="伺佰" />
+    <!-- 版权 -->
+    <meta name="keywords" content="伺佰的站, HTML, CSS, JavaScript,C" />
+    <!-- 网站关键字 -->
+    <meta name="description" content="一个练习用的前端站" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- IE 以最高级模式渲染文档 -->
+    <!-- <meta http-equiv="X-UA-Compatible" content="chrome=1"> -->
+    <!-- 强制 IE 使用 Chrome Frame 渲染 -->
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> -->
+    <!-- 最佳的兼容模式方案 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 缩放设置 -->
+    <link rel="Shortcut Icon" href="/Image/favicon.ico" type="image/x-icon" />
+    <!-- ico图标 -->
+    <link type="text/css" rel="stylesheet" href="CSS文件路径" />
+    <!-- CSS文件路径 -->
+    <script type="text/javascript" src="JS文件路径"></script>
+    <!-- JS文件路径 -->
+    <title>有的没的</title>
+    <!-- 网站标题 -->
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        /* 动态边框50% */
+    }
+
+    .屏 {
+        z-index: -100;
+        /* font-family: 'Quicksand', sans-serif; */
+        margin: 0;
+        min-height: 100vh;
+        /* height: 200%; */
+        background-color: #e493d0;
+        background-image:
+            radial-gradient(closest-side, rgba(235, 105, 78, 1), rgba(235, 105, 78, 0)),
+            radial-gradient(closest-side, rgba(243, 11, 164, 1), rgba(243, 11, 164, 0)),
+            radial-gradient(closest-side, rgba(254, 234, 131, 1), rgba(254, 234, 131, 0)),
+            radial-gradient(closest-side, rgba(170, 142, 245, 1), rgba(170, 142, 245, 0)),
+            radial-gradient(closest-side, rgba(248, 192, 147, 1), rgba(248, 192, 147, 0));
+        background-size:
+            130vmax 130vmax,
+            80vmax 80vmax,
+            90vmax 90vmax,
+            110vmax 110vmax,
+            90vmax 90vmax;
+        background-position:
+            -80vmax -80vmax,
+            60vmax -30vmax,
+            10vmax 10vmax,
+            -30vmax -10vmax,
+            50vmax 50vmax;
+        background-repeat: no-repeat;
+        animation: 5s movement linear infinite;
+    }
+
+    /* .屏::after { */
+    /* content: ''; */
+    /* display: block; */
+    /* position: fixed; */
+    /* width: 100%; */
+    /* height: 100%; */
+    /* top: 0; */
+    /* left: 0; */
+    /* backdrop-filter: blur(10px); */
+    /* -webkit-backdrop-filter: blur(10px); */
+    /* } */
+    .屏::after {
+        content: '';
+        display: block;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        /* top: 0; */
+        /* left: 0; */
+    }
+
+    @keyframes movement {
+
+        0%,
+        100% {
+            background-size:
+                130vmax 130vmax,
+                80vmax 80vmax,
+                90vmax 90vmax,
+                110vmax 110vmax,
+                90vmax 90vmax;
+            background-position:
+                -80vmax -80vmax,
+                60vmax -30vmax,
+                10vmax 10vmax,
+                -30vmax -10vmax,
+                50vmax 50vmax;
+        }
+
+        25% {
+            background-size:
+                100vmax 100vmax,
+                90vmax 90vmax,
+                100vmax 100vmax,
+                90vmax 90vmax,
+                60vmax 60vmax;
+            background-position:
+                -60vmax -90vmax,
+                50vmax -40vmax,
+                0vmax -20vmax,
+                -40vmax -20vmax,
+                40vmax 60vmax;
+        }
+
+        50% {
+            background-size:
+                80vmax 80vmax,
+                110vmax 110vmax,
+                80vmax 80vmax,
+                60vmax 60vmax,
+                80vmax 80vmax;
+            background-position:
+                -50vmax -70vmax,
+                40vmax -30vmax,
+                10vmax 0vmax,
+                20vmax 10vmax,
+                30vmax 70vmax;
+        }
+
+        75% {
+            background-size:
+                90vmax 90vmax,
+                90vmax 90vmax,
+                100vmax 100vmax,
+                90vmax 90vmax,
+                70vmax 70vmax;
+            background-position:
+                -50vmax -40vmax,
+                50vmax -30vmax,
+                20vmax 0vmax,
+                -10vmax 10vmax,
+                40vmax 60vmax;
+        }
+    }
+
+    .头部 {
+        display: flex;
+        /* 弹性布局 */
+        justify-content: space-between;
+        /* 在容器中央对齐弹性项目，项目在行与行之间留有间隔 */
+        align-items: center;
+        /* 弹性容器内的项目指定居中对齐 */
+        padding: 18px 8%;
+        height: 10vh;
+        /* 内边框 */
+        /* transition: background 1s;过渡效果 */
+    }
+
+    .头部 div {
+        z-index: 10;
+        display: flex;
+        /* 弹性布局 */
+        align-items: center;
+        /* 弹性容器内的项目指定居中对齐 */
+    }
+
+    .头部 img {
+        width: 30px;
+        margin-right: 20px;
+        /* 距离右边元素块距10像素 */
+    }
+
+    .头部 span {
+        font-size: 26px;
+        font-weight: 600;
+        /* 字体粗细 */
+        color: #fff;
+    }
+
+    .头部 ul li {
+        z-index: 10;
+        display: inline-block;
+        /* display: inline; */
+        /* display: block; */
+        /* 水平导航链接 */
+        list-style: none;
+        /* 列表项目样式为不使用项目符号（默认样式） */
+        margin: 10px 20px;
+        /* 外边距的宽度 */
+    }
+
+    .头部 ul li a {
+        z-index: 100;
+        text-decoration: none;
+        /* 无文本修饰 */
+        color: #fff;
+        font-weight: 500;
+        /* 字体的粗细 */
+    }
+
+    .幕 {
+        height: 90vh;
+        display: flex;
+        justify-content: center;
+        /* 弹性项目居中紧挨着填充。（如果剩余的自由空间是负的，则弹性项目将在两个方向上同时溢出）。 */
+        align-items: center;
+        /* 弹性盒子元素在该行的侧轴（纵轴）上居中放置。（如果该行的尺寸小于弹性盒子元素的尺寸，则会向两个方向溢出相同的长度）。 */
+        /* flex-wrap: wrap; */
+        /* 弹性容器为多行。该情况下弹性子项溢出的部分会被放置到新行，子项内部会发生断行 */
+        z-index: 10;
+    }
+
+    .内容 {
+        display: flex;
+        justify-content: center;
+        /* 弹性项目居中紧挨着填充。（如果剩余的自由空间是负的，则弹性项目将在两个方向上同时溢出）。 */
+        align-items: center;
+        /* 弹性盒子元素在该行的侧轴（纵轴）上居中放置。（如果该行的尺寸小于弹性盒子元素的尺寸，则会向两个方向溢出相同的长度）。 */
+        flex-wrap: wrap;
+        /* 弹性容器为多行。该情况下弹性子项溢出的部分会被放置到新行，子项内部会发生断行 */
+        /* flex-direction: row; */
+        width: 130vh;
+    }
+
+    .块 {
+        width: 30vh;
+        height: 10vh;
+        margin: 2.5vh;
+        border-radius: 20px;
+        text-align: center;
+        line-height: 10vh;
+    }
+
+    .块 a {
+        text-decoration: none;
+        color: #000;
+    }
+</style>
+<bady>
+    <div class="屏">
+        <div class="头部">
+            <div>
+                <img title="随手一画的图标" src="/Image/favicon.ico">
+                <span>有的没的</span>
+            </div>
+            <ul>
+                <li><a title="返回" href="../index.html">首页</a></li>
+                <li><a title="这是伺佰,他很没有梦想" href="/html/关于.html">关于</a></li>
+                <li><a title="伺佰的游戏盒" href="/html/Game.html">Game</a></li>
+                <li><a title="伺佰的工具箱" href="/html/工具.html">工具</a></li>
+            </ul>
+        </div>
+        <div class="幕">
+            <div class="内容">
+                <div class="块"><a title="" href="/html\有的没的\网站信息\网站信息.html">网站信息</a></div>
+                <div class="块"><a title="" href="https://sibaicui.github.io/40">HTML</a></div>
+                <div class="块"><a title="" href="https://sibaicui.github.io/4040">CSS</a></div>
+                <div class="块"><a title="" href="https://sibaicui.github.io/40400">JavaScript </a></div>
+                <div class="块"><a title="" href="/html\有的没的\胡言乱语\胡言乱语.html">胡言乱语</a></div>
+                <div class="块"><a title="" href="/html\有的没的\技术筏\技术筏.html">技术筏</a></div>
+                <div class="块"><a title="" href="https://sibaicui.github.io/404007">C</a></div>
+                <div class="块"><a title="" href="https://sibaicui.github.io/404004">示例</a></div>
+                <div class="块"><a title="" href="/html\有的没的\其他\其他.html">其他</a></div>
+            </div>
+        </div>
+    </div>
+</bady>
+
+</html>

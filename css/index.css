@@ -1,0 +1,243 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* 动态边框50% */
+    /* font-family: 'Poppins', sans-serif; */
+    /* filter: grayscale(1); */
+    /* 灰白样式 */
+}
+
+.标题 {
+    width: 100%;
+    height: 100vh;
+    background-image: linear-gradient(rgba(5, 0, 136, 0.5), rgba(5, 0, 136, 0.5)),
+        /* background-image: linear-gradient(Pink,#66FFCC,#66CCFF), */
+        url(/Image/破烂的木椅.jpg);
+    background-position: center;
+    /* 背景居中 */
+    background-attachment: fixed;
+    /*背景图片固定*/
+    background-repeat: no-repeat;
+    /* 背景图片不平铺 */
+    /* background-size: cover; */
+    background-size: 110%;
+    /* 使背景图像完全覆盖背景区域 */
+    overflow-x: hidden;
+    /* 对内容的左/右边缘进行裁剪 */
+    animation: 背景动画 30s infinite;
+}
+
+@keyframes 背景动画 {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+nav {
+    width: 100%;
+    display: flex;
+    /* 弹性布局 */
+    justify-content: space-between;
+    /* 在容器中央对齐弹性项目，项目在行与行之间留有间隔 */
+    align-items: center;
+    /* 弹性容器内的项目指定居中对齐 */
+    padding: 18px 8%;
+    /* 内边框 */
+    /* transition: background 1s;过渡效果 */
+}
+
+nav .标识 {
+    display: flex;
+    /* 弹性布局 */
+    align-items: center;
+    /* 弹性容器内的项目指定居中对齐 */
+    font-size: 26px;
+    /* 字体大小 */
+    font-weight: 600;
+    /* 字体粗细 */
+    color: #fff;
+}
+
+nav .标识 img {
+    width: 30px;
+    margin-right: 20px;
+    /* 距离右边元素块距10像素 */
+}
+
+nav ul li {
+    display: inline-block;
+    /* 水平导航链接 */
+    list-style: none;
+    /* 列表项目样式为不使用项目符号（默认样式） */
+    margin: 10px 20px;
+    /* 外边距的宽度 */
+}
+
+nav ul li a {
+    text-decoration: none;
+    /* 无文本修饰 */
+    color: #fff;
+    font-weight: 500;
+    /* 字体的粗细 */
+}
+
+nav:hover {
+    /* background: #fff; */
+    background-image: linear-gradient(to right, rgba(255, 255, 255, .6), rgba(255, 255, 255, .3), rgba(255, 255, 255, .2));
+}
+
+nav:hover .标识 {
+    /* color: #333; */
+    color: pink;
+    text-shadow: 2px 2px 5px red;
+    /* 文字阴影 */
+}
+
+nav:hover ul li a {
+    color: #66FFCC;
+    /* padding: 5px; */
+    border-width: 0px 0px 2px 0px;
+    /* 边框宽度 */
+    border-style: solid;
+    /* 边框样式 */
+    border-color: #fff;
+    /* 边框颜色 */
+}
+
+.内容 {
+    margin-top: 9%;
+    /* 上外边距 */
+    margin-left: 9%;
+    /* 左外边距 */
+    color: #fff;
+}
+
+.内容 h1 {
+    font-size: 80px;
+    /* 字体大小 */
+    line-height: 100px;
+    /* 行高 */
+    font-weight: 600;
+    /* 字体粗细 */
+}
+
+.内容 p {
+    max-width: 500px;
+    /* 段落的最大宽度 */
+    line-height: 28px;
+    /* 行高 */
+    opacity: 0;
+    /* 不透明度 */
+}
+
+.链接 {
+    margin-top: 30px;
+    /* 上外边距 */
+    opacity: 0;
+    /* 不透明度 */
+}
+
+.链接 a {
+    color: #fff;
+    text-decoration: none;
+    /* 无文本修饰 */
+    display: inline-block;
+    /* 水平导航链接 */
+}
+
+.选择边框 {
+    border: 2px solid #fff;
+    /* 边框 */
+    padding: 10px 35px;
+    /* 内边距 */
+    border-radius: 30px;
+    /* 圆角 */
+    margin-right: 15px;
+    /* 右外边距 */
+}
+
+.向左滑动 {
+    animation: 左滑动画 1s linear forwards;
+    /* 动画 名 一秒 线性 正向 */
+}
+
+@keyframes 左滑动画 {
+    0% {
+        transform: translate(100px);
+        /* 平移 translate(值)(x, y) */
+        opacity: 0;
+        /* 不透明度 */
+    }
+
+    100% {
+        transform: translate(0px);
+        /* 平移 translate(值)(x, y) */
+        opacity: 1;
+        /* 不透明度 */
+    }
+}
+
+p.向左滑动 {
+    animation-delay: 1s;
+    /* 等待一秒，然后开始动画 */
+}
+
+.链接.向左滑动 {
+    animation-delay: 2s;
+    /* 等待两秒，然后开始动画 */
+}
+
+.文本动画 {
+    color: transparent;
+    /* 颜色为透明 */
+    -webkit-text-stroke: 1px #fff;
+    /* 网络套件 文本 ??? 边框为1px白色 */
+    background: url(/Image/back.png);
+    -webkit-background-clip: text;
+    /* 网络套件 背景 夹子 文本 */
+    animation: 文本动画 20s linear infinite;
+}
+
+@keyframes 文本动画 {
+    100% {
+        background-position: 2000px 0;
+    }
+}
+
+.下拉导航栏 {
+    position: relative;
+    /* 相对定位 */
+    display: inline-block;
+    /* 水平导航链接 */
+}
+
+.下拉 {
+    display: none;
+    /* 隐藏元素 */
+    position: absolute;
+    /* 绝对定位 */
+    /* background-color: #fff; */
+    /* background-color: background-image: linear-gradient(to right, rgba(255, 255, 255, .6), rgba(255, 255, 255, .3), rgba(255, 255, 255, .2)); */
+    /* min-width: 60px; */
+    /* 最小宽度 */
+    /* box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2); */
+    /* font-size: 10px; */
+    /* 文字大小 */
+    /* padding: 2px 2px; */
+    /* font-weight: 50; */
+    /* 字体的粗细 */
+}
+
+.下拉导航栏:hover .下拉 {
+    display: block;
+    /* 将元素显示为块级元素 */
+}

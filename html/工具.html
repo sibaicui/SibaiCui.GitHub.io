@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <!-- <meta http-equiv="refresh" content="30"> -->
+    <!-- 每隔 30 秒刷新一次文档 -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- 规定文档的字符编码 -->
+    <meta http-equiv="Content-Language" content="zh-CN" />
+    <!-- 语言中文，中国版本 -->
+    <meta name="Author" content="伺佰" />
+    <!-- 作者的名字 -->
+    <meta name="Copyright" content="伺佰" />
+    <!-- 版权 -->
+    <meta name="keywords" content="伺佰的站, HTML, CSS, JavaScript,C" />
+    <!-- 网站关键字 -->
+    <meta name="description" content="一个练习用的前端站" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- IE 以最高级模式渲染文档 -->
+    <!-- <meta http-equiv="X-UA-Compatible" content="chrome=1"> -->
+    <!-- 强制 IE 使用 Chrome Frame 渲染 -->
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> -->
+    <!-- 最佳的兼容模式方案 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 缩放设置 -->
+    <link rel="Shortcut Icon" href="/Image/favicon.ico" type="image/x-icon" />
+    <!-- ico图标 -->
+    <link type="text/css" rel="stylesheet" href="CSS文件路径" />
+    <!-- CSS文件路径 -->
+    <script type="text/javascript" src="JS文件路径"></script>
+    <!-- JS文件路径 -->
+    <title>工具</title>
+    <!-- 网站标题 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            box-sizing: border-box;
+            /* 标准盒子模型，子容器的padding和border的厚度都算在50%之内 */
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* width: 100%; */
+            /* height: 100%; */
+            background-image: linear-gradient(to bottom right, #66CCFF, #66FFCC);
+            /* background-size: 110%; */
+            /* 使背景图像完全覆盖背景区域 */
+        }
+
+        /* 头部样式 */
+        .头部 {
+            padding: 18px 8%;
+            /* background-color: #f1f1f1; */
+            padding: 20px;
+            /* text-align: center; */
+            font-size: 26px;
+            /* 字体大小 */
+            font-weight: 600;
+            /* 字体粗细 */
+            color: #fff;
+        }
+
+        .头部 img {
+            width: 30px;
+            margin-right: 10px;
+            /* 距离右边元素块距10像素 */
+        }
+
+        .头部:hover {
+            color: pink;
+            text-shadow: 2px 2px 5px red;
+            /* 文字阴影 */
+        }
+
+        /* 导航条 */
+        .导航 {
+            position: -webkit-sticky;
+            /* Safari */
+            position: sticky;
+            top: 0;
+            /* 粘性定位 */
+            overflow: hidden;
+            /* 溢出隐藏 */
+            padding: 0px 8%;
+            /* background-color: #333; */
+            background-image: linear-gradient(to right, rgba(102, 204, 255, 0.5), rgba(5, 0, 136, 0.5), rgba(102, 255, 204, 0.5));
+        }
+
+        /* 导航链接 */
+        .导航 a {
+            float: right;
+            /* 左浮动 */
+            /* float: left; */
+            display: block;
+            /* 水平导航链接 */
+            color: #f2f2f2;
+            text-align: center;
+            /* 居中 */
+            padding: 14px 16px;
+            text-decoration: none;
+            /* 字体属性默认 */
+        }
+
+        /* 链接 - 修改颜色 */
+        .导航 a:hover {
+            /* background-color: #ddd; */
+            color: black;
+            /* padding: 5px; */
+            border-width: 0px 0px 2px 0px;
+            /* 边框宽度 */
+            border-style: solid;
+            /* 边框样式 */
+            border-color: #fff;
+            /* 边框颜色 */
+        }
+
+        /* 创建三个相等的列 */
+        .列 {
+            float: left;
+            /* 左浮动 */
+            width: 30%;
+            height: 50vh;
+            margin-top: 10px;
+            margin-left: 2.5%;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, .6), rgba(255, 255, 255, .3), rgba(255, 255, 255, .2));
+            border-radius: 10px;
+            /* 圆角 */
+            padding: 20px;
+        }
+
+        .按键 {
+            /* position: relative; */
+            /* left: 300px; */
+            /* top: 200px; */
+            /* bottom: -80px; */
+            margin-top: 10px;
+            text-align: right;
+            /* 居右 */
+        }
+
+        .按键 a {
+            /* text-align: right; */
+            /* position: relative; */
+            /* left: 300px; */
+            /* top: 200px; */
+            /* bottom: -80px; */
+            /* margin-left: 60%; */
+            /* border-style:solid */
+            /* 边框 */
+            /* padding: 5px; */
+            text-decoration: none;
+            /* 字体属性默认 */
+            /* background-color: red; */
+            color: #000;
+            /* border-radius: 20px; */
+        }
+
+        /* 列后清除浮动 */
+        .页面:after {
+            content: "";
+            display: table;
+            clear: both;
+            /* 清除浮动 */
+        }
+
+        .标签 {
+            margin-left: 5%;
+            padding: 20px;
+            clear: both;
+            /* 清除浮动 */
+        }
+
+        /* 响应式布局 - 小于 600 px 时改为上下布局 */
+        @media screen and (max-width: 913px) {
+            .列 {
+                width: 100%;
+                height: auto;
+                margin: 5px;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            .列 {
+                width: 100%;
+                height: auto;
+                margin: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="头部">
+        <img title="随手一画的图标" src="/Image/favicon.ico">
+        <span title="伺佰的工具箱">伺佰的工具箱</span>
+    </div>
+    <div class="导航">
+        <a href="../index.html" title="导航">首页</a>
+        <a href="/html/关于.html" title="这是伺佰,他很没有梦想">关于</a>
+        <a href="/html/Game.html" title="伺佰的游戏盒">Game</a>
+        <a href="/html/有的没的.html" title="没的有的">有的没的</a>
+        <a href="#" title="在做了，新建文件夹" style="float:right">Windows</a>
+        <a href="#" title="在做了，新建文件夹" style="float:right">Android</a>
+    </div>
+    <div class="页面">
+        <div class="标签">
+            <h2>Windows</h2>
+        </div>
+        <div class="列">
+            <h2 style="text-align: center;">WinRaR</h2>
+            <div style="text-align: center;margin-top: 10px;">
+                <img src="/Image/logo-WinRAR.png" width="100px" height="100px" />
+            </div>
+            <div class="按键">
+                <a href="http://www.winrar.com.cn/">官网下载</a>
+                <a href="https://wwt.lanzouj.com/igSUE00ztu6b">网盘下载</a>
+            </div>
+            <h5>作者：</h5>Eugene Roshal
+            <h5>解释：</h5>一款可以换皮肤的解压软件。
+            <h5>蓝奏云密码：cvg5</h5>
+        </div>
+        <div class="列">
+            <h2 style="text-align: center;">Visual Studio Code</h2>
+            <div style="text-align: center;margin-top: 10px;">
+                <img src="/Image\logo-Visual Studio Code.png" width="100px" height="100px" />
+            </div>
+            <div class="按键">
+                <a href="https://code.visualstudio.com/">官网下载</a>
+            </div>
+            <h5>作者：</h5>微软
+            <h5>解释：</h5>一款免费，有大量插件的代码编辑器。
+        </div>
+        <div class="列">
+            <h2 style="text-align: center;">图吧工具箱</h2>
+            <div style="text-align: center;margin-top: 10px;">
+                <img src="/Image\logo-图吧工具箱.jpg" width="100px" height="100px" />
+            </div>
+            <div class="按键">
+                <a href="http://www.tbtool.cn/index.html" class="按键">官网下载</a>
+            </div>
+            <h5>作者：</h5>图吧神仙
+            <h5>解释：</h5>你的设备硬件是真的吗？
+        </div>
+        <div class="列">
+            <h2 style="text-align: center;">Steam</h2>
+            <div style="text-align: center;margin-top: 10px;">
+                <img src="/Image\logo-Steam.png" width="100px" height="100px" />
+            </div>
+            <div class="按键">
+                <a href="https://store.steampowered.com/" class="按键">官网下载</a>
+            </div>
+            <h5>作者：</h5>Valve
+            <h5>解释：</h5>这里有些好康的游戏！
+        </div>
+        <div class="列">
+            <h2 style="text-align: center;">格式工厂</h2>
+            <div style="text-align: center;margin-top: 10px;">
+                <img src="/Image\logo-格式工厂.png" width="100px" height="100px" />
+            </div>
+            <div class="按键">
+                <a href="http://formatfactory.org/CN/index.html" class="按键">官网下载</a>
+            </div>
+            <h5>作者：</h5>上海格诗网络科技有限公司
+            <h5>解释：</h5>一款免费多功能的多媒体格式转换软件
+        </div>
+        <div class="列">
+            <h2 style="text-align: center;">MikuMikuDance</h2>
+            <div style="text-align: center;margin-top: 10px;">
+                <img src="/Image\logo-MikuMikuDance.png" width="100px" height="100px" />
+            </div>
+            <div class="按键">
+                <a href="https://wwt.lanzouj.com/iyMTf0111gwh" class="按键">网盘下载</a>
+            </div>
+            <h5>作者：</h5>樋口優
+            <h5>解释：</h5>3D动画制作软件，搞爆你的硬盘。
+            <h5>蓝奏云密码；2g98</h5>
+        </div>
+        <div class="列">
+            <h2 style="text-align: center;">JoyToKey</h2>
+            <div style="text-align: center;margin-top: 10px;">
+                <img src="/Image\logo-JoyToKey.jpg" width="100px" height="100px" />
+            </div>
+            <div class="按键">
+                <a href="https://joytokey.net/ja/" class="按键">官网</a>
+                <a href="https://wwt.lanzouj.com/iVxL50113cib" class="按键">网盘下载</a>
+            </div>
+            <h5>作者：</h5>不知名的日本人
+            <h5>解释：</h5>一个可以将手柄输入转换成键盘或鼠标输入的工具。
+        </div>
+        <div class="列">
+            <h2 style="text-align: center;">PHPStudy</h2>
+            <div style="text-align: center;margin-top: 10px;">
+                <img src="/Image\logo-PHPStudy.jpg" width="100px" height="100px" />
+            </div>
+            <div class="按键">
+                <a href="https://www.xp.cn/" class="按键">官网下载</a>
+                <a href="https://wwt.lanzouj.com/iVEws011jxoj" class="按键">网盘下载</a>
+            </div>
+            <h5>作者：</h5>安徽小皮教育科技有限公司
+            <h5>解释：</h5>php环境工具。
+        </div>
+        <div class="列">
+            <h2 style="text-align: center;">wampserver</h2>
+            <div style="text-align: center;margin-top: 10px;">
+                <img src="/Image\logo-wampserver.jpg" width="100px" height="100px" />
+            </div>
+            <div class="按键">
+                <a href="https://www.wampserver.com/en/" class="按键">官网下载</a>
+            </div>
+            <h5>作者：</h5>不知名的法国人
+            <h5>解释：</h5>一款由法国人开发的Apache、PHP以及MySQL的整合软件包
+        </div>
+        <div class="列">
+            <h2 style="text-align: center;">wordpress</h2>
+            <div style="text-align: center;margin-top: 10px;">
+                <img src="/Image\logo-wordpress.png" width="100px" height="100px" />
+            </div>
+            <div class="按键">
+                <a href="https://cn.wordpress.org/" class="按键">官网下载</a>
+                <a href="https://wwt.lanzouj.com/imfIQ011jyxe" class="按键">网盘下载</a>
+            </div>
+            <h5>作者：</h5>Michel Valdrighi等
+            <h5>解释：</h5>一款能让您建立出色网站、博客或应用程序的开源软件。
+        </div>
+        <div class="列">
+            <h2 style="text-align: center;">ADB</h2>
+            <div style="text-align: center;margin-top: 10px;">
+                <img src="/Image\logo-ADB.jpg" width="100px" height="100px" />
+            </div>
+            <div class="按键">
+                <a href="https://developer.android.google.cn/studio/command-line/adb?hl=zh-cn" class="按键">官网</a>
+                <a href="https://wwt.lanzouj.com/iGoW7011l0uj" class="按键">网盘下载</a>
+            </div>
+            <h5>作者：</h5>google
+            <h5>解释：</h5>Android 调试桥，安卓系统的无限可能。
+        </div>
+        <div class="列">
+            <h2 style="text-align: center;">歌词下载器</h2>
+            <div style="text-align: center;margin-top: 10px;">
+                <img src="/Image\logo-歌词下载器.png" width="100px" height="100px" />
+            </div>
+            <div class="按键">
+                <a href="https://wwt.lanzouj.com/iIcma011l0va" class="按键">网盘下载</a>
+            </div>
+            <h5>作者：</h5>一位不知名大佬
+            <h5>解释：</h5>是时候让网易云把歌词交出来了。
+        </div>
+        <div class="列">
+            <h2 style="text-align: center;">Arctime</h2>
+            <div style="text-align: center;margin-top: 10px;">
+                <img src="/Image\logo-Arctime.png" width="100px" height="100px" />
+            </div>
+            <div class="按键">
+                <a href="https://arctime.org/" class="按键">官网下载</a>
+            </div>
+            <h5>作者：</h5>亿铭科技
+            <h5>解释：</h5>字幕制作软件
+        </div>
+        <div class="列">
+            <h2 style="text-align: center;">Photoshop</h2>
+            <div style="text-align: center;margin-top: 10px;">
+                <img src="/Image\logo-Photoshop.png" width="100px" height="100px" />
+            </div>
+            <div class="按键">
+                <a href="https://www.adobe.com/cn/products/photoshop.html" class="按键">官网</a>
+            </div>
+            <h5>作者：</h5>Adobe
+            <h5>解释：</h5>照片和设计软件
+        </div>
+        <div class="列">
+            <h2 style="text-align: center;">Premiere</h2>
+            <div style="text-align: center;margin-top: 10px;">
+                <img src="/Image\logo-Premiere.jpg" width="100px" height="100px" />
+            </div>
+            <div class="按键">
+                <a href="https://www.adobe.com/cn/products/premiere.html" class="按键">官网</a>
+            </div>
+            <h5>作者：</h5>Adobe
+            <h5>解释：</h5>一款视频编辑软件
+        </div>
+        <div class="标签">
+            <h2>Android</h2>
+        </div>
+        <div class="列">
+            <h2 style="text-align: center;">一本日记</h2>
+            <div style="text-align: center;margin-top: 10px;">
+                <img src="/Image\logo-一本日记.jpg" width="100px" height="100px" />
+            </div>
+            <div class="按键">
+                <a href="https://1diary.me/" class="按键">官网下载</a>
+            </div>
+            <h5>作者：</h5>杭州先丰网络科技有限公司
+            <h5>解释：</h5>重拾旧时光
+        </div>
+</body>
+
+</html>

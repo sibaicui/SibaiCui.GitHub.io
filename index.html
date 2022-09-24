@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <!-- <meta http-equiv="refresh" content="30"> -->
+    <!-- 每隔 30 秒刷新一次文档 -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- 规定文档的字符编码 -->
+    <meta http-equiv="Content-Language" content="zh-CN" />
+    <!-- 语言中文，中国版本 -->
+    <meta name="Author" content="伺佰" />
+    <!-- 作者的名字 -->
+    <meta name="Copyright" content="伺佰" />
+    <!-- 版权 -->
+    <meta name="keywords" content="伺佰的站, HTML, CSS, JavaScript,C" />
+    <!-- 网站关键字 -->
+    <meta name="description" content="一个练习用的前端站" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- IE 以最高级模式渲染文档 -->
+    <!-- <meta http-equiv="X-UA-Compatible" content="chrome=1"> -->
+    <!-- 强制 IE 使用 Chrome Frame 渲染 -->
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> -->
+    <!-- 最佳的兼容模式方案 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 缩放设置 -->
+    <link rel="Shortcut Icon" href="/Image/favicon.ico" type="image/x-icon" />
+    <!-- ico图标 -->
+    <link type="text/css" rel="stylesheet" href="/css\index.css" />
+    <link type="text/css" rel="stylesheet" href="APlayer\APlayer.min.css" />
+    <!-- 引入APlayer.min.css -->
+    <!-- CSS文件路径 -->
+    <script type="text/javascript" src="/JavaScript\通用.js"></script>
+    <!-- <script type="text/javascript" src="/JavaScript\live2D.js"></script> -->
+    <!-- 引入live2D 暂时没有-->
+    <!-- JS文件路径 -->
+    <script type="text/javascript" src="/APlayer\APlayer.min.js"></script>
+    <!-- 引入 APlayer -->
+    <!-- APlayer网址 https://github.com/DIYgod/APlayer -->
+    <script type="text/javascript" src="MetingJS\source\Meting.js"></script>
+    <!-- 引入 MetingJS -->
+    <meting-js fixed="true" server="netease" type="playlist" id="7590771412"></meting-js>
+    <!-- https://music.163.com/#/my/m/music/playlist?id=7590771412 -->
+    <!-- https://music.163.com/#/my/m/music/playlist?id=7590433903 -->
+    <!-- MetingJS网址 https://github.com/metowolf/MetingJS -->
+    <!-- fixed="true" 是否附着页面底部，否为false -->
+    <!-- server="netease" 网易云音乐 -->
+    <!-- type="playlist" 网易云音乐api -->
+    <!-- theme: '#ee8243' 主题颜色  yellow apua red-->
+    <title>伺佰的站|发光的冒险</title>
+    <!-- 网站标题 -->
+</head>
+<script src="live2Dweb\lib\L2Dwidget.min.js"></script>
+<!-- 引入live2D -->
+<script>
+    L2Dwidget.init({
+        model: {// 模型
+            jsonPath: "./live2Dweb/live2d-widget-model-shizuku/assets/shizuku.model.json",
+            scale: 1 //模型缩放比例
+        },
+        display: {
+            position: "right", //模型的位置（左or右）
+            width: 200, //模型宽度
+            height: 400, //模型高度
+            hOffset: 30, //模型水平偏移量
+            vOffset: -100 //模型垂直偏移量
+        },
+        mobile: {
+            show: true, //手机端是否显示
+            scale: 1 //缩放比例
+        },
+        react: {
+            opacity: 1 //模型不透明度
+        },
+        dialog: {
+            hitokoto: true,
+            enable: true,
+        }
+    })
+    // L2Dwidget的配置
+        //L2Dwidget的官方配置文档看这里
+        //https://l2dwidget.js.org/docs/class/src/index.js~L2Dwidget.html
+</script>
+
+<body>
+    </script>
+    <div class="标题">
+        <nav>
+            <div class="标识">
+                <img title="随手一画的图标" src="/Image/favicon.ico">
+                <span title="发光的冒险|伺佰的站">发光的冒险|Sibai的站</span>
+            </div>
+            <ul>
+                <li title="这是伺佰,他很没有梦想"><a href="/html/关于.html">关于</a>
+                </li>
+                <li title="伺佰的游戏盒"><a href="/html/Game.html">Game</a></li>
+                <li title="伺佰的工具箱"><a href="/html/工具.html">工具</a></li>
+                <li title="没的有的"><a href="/html/有的没的.html">有的没的</a>
+                </li>
+                <li class="下拉导航栏" title="在做了"><a href="#">语言</a>
+                    <ul class="下拉">
+                        <li><a href="">中文</a></li>
+                        <li><a href="">English</a></li>
+                        <li><a href="">日本語</a></li>
+                        <li><a href="">Русский</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div class="内容">
+            <h1 class="文本动画" title="你好世界">HELLO<br>WORLD</h1>
+            <p class="向左滑动" title="飞鸟集">水里的游鱼是沉默的，陆地上的兽类是喧闹的，空中的飞鸟是歌唱着的。 但是，人类却兼有海里的沉默，地上的喧闹与空中的音乐。</p>
+            <div class="链接 向左滑动">
+                <a href="https://github.com/sibaicui" class="选择边框">GitHub</a>
+                <a href="https://gitee.com/sibaicui">Gitee</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

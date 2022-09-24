@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <!-- <meta http-equiv="refresh" content="30"> -->
+    <!-- 每隔 30 秒刷新一次文档 -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- 规定文档的字符编码 -->
+    <meta http-equiv="Content-Language" content="zh-CN" />
+    <!-- 语言中文，中国版本 -->
+    <meta name="Author" content="伺佰" />
+    <!-- 作者的名字 -->
+    <meta name="Copyright" content="伺佰" />
+    <!-- 版权 -->
+    <meta name="keywords" content="伺佰的站, HTML, CSS, JavaScript,C" />
+    <!-- 网站关键字 -->
+    <meta name="description" content="一个练习用的前端站" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- IE 以最高级模式渲染文档 -->
+    <!-- <meta http-equiv="X-UA-Compatible" content="chrome=1"> -->
+    <!-- 强制 IE 使用 Chrome Frame 渲染 -->
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> -->
+    <!-- 最佳的兼容模式方案 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 缩放设置 -->
+    <link rel="Shortcut Icon" href="/Image/favicon.ico" type="image/x-icon" />
+    <!-- ico图标 -->
+    <link type="text/css" rel="stylesheet" href="CSS文件路径" />
+    <!-- CSS文件路径 -->
+    <script type="text/javascript" src="JS文件路径"></script>
+    <!-- JS文件路径 -->
+    <title>关于</title>
+    <!-- 网站标题 -->
+    <meta charset="UTF-8">
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        /* 动态边框50% */
+        /* font-family: 'Poppins', sans-serif; */
+        /* filter: grayscale(1); */
+        /* 灰白样式 */
+    }
+
+    body {
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+            /* background-image: linear-gradient(Pink,#66FFCC,#66CCFF), */
+            url(/Image/禁止通行.png);
+        background-position: center;
+        /* 背景居中 */
+        background-attachment: fixed;
+        /*背景图片固定*/
+        background-repeat: no-repeat;
+        /* 背景图片不平铺 */
+        /* background-size: contain; */
+        /* 最简单粗暴的方法，缺点会给背景拉伸变形 */
+        background-size: cover;
+        /* background-size: 110%; */
+        /* 使背景图像完全覆盖背景区域 */
+        overflow-x: hidden;
+        /* 对内容的左/右边缘进行裁剪 */
+        /* animation: 背景动画 30s infinite; */
+    }
+
+    .导航 {
+        width: 100%;
+        display: flex;
+        /* 弹性布局 */
+        justify-content: space-between;
+        /* 在容器中央对齐弹性项目，项目在行与行之间留有间隔 */
+        align-items: center;
+        /* 弹性容器内的项目指定居中对齐 */
+        padding: 18px 8%;
+        /* 内边框 */
+        /* transition: background 1s;过渡效果 */
+    }
+
+    .导航-标识 {
+        display: flex;
+        /* 弹性布局 */
+        align-items: center;
+        /* 弹性容器内的项目指定居中对齐 */
+        font-size: 26px;
+        /* 字体大小 */
+        font-weight: 600;
+        /* 字体粗细 */
+        color: #fff;
+    }
+
+    .导航-标识 img {
+        width: 30px;
+        margin-right: 20px;
+        /* 距离右边元素块距10像素 */
+    }
+
+    .导航-导航栏 li {
+        display: inline-block;
+        /* 水平导航链接 */
+        list-style: none;
+        /* 列表项目样式为不使用项目符号（默认样式） */
+        margin: 10px 20px;
+        /* 外边距的宽度 */
+    }
+
+    .导航-导航栏 li a {
+        text-decoration: none;
+        /* 无文本修饰 */
+        color: #fff;
+        font-weight: 500;
+        /* 字体的粗细 */
+    }
+
+    .导航:hover {
+        /* background: #fff; */
+        background-image: linear-gradient(to right, rgba(255, 255, 255, .6), rgba(255, 255, 255, .3), rgba(255, 255, 255, .2));
+    }
+
+    .导航:hover .导航-标识 {
+        /* color: #333; */
+        color: pink;
+        text-shadow: 2px 2px 5px red;
+        /* 文字阴影 */
+    }
+
+    .导航:hover .导航-导航栏 li a {
+        color: #66FFCC;
+        /* padding: 5px; */
+        /* border-width: 0px 0px 2px 0px; */
+        /* 边框宽度 */
+        /* border-style: solid; */
+        /* 边框样式 */
+        /* border-color: #fff; */
+        /* 边框颜色 */
+    }
+
+    .下拉导航栏 {
+        position: relative;
+        /* 相对定位 */
+        display: inline-block;
+        /* 水平导航链接 */
+    }
+
+    .下拉 {
+        display: none;
+        /* 隐藏元素 */
+        position: absolute;
+        /* 绝对定位 */
+        /* background-color: #fff; */
+        /* background-color: background-image: linear-gradient(to right, rgba(255, 255, 255, .6), rgba(255, 255, 255, .3), rgba(255, 255, 255, .2)); */
+        /* min-width: 60px; */
+        /* 最小宽度 */
+        /* box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2); */
+        /* font-size: 10px; */
+        /* 文字大小 */
+        /* padding: 2px 2px; */
+        /* font-weight: 50; */
+        /* 字体的粗细 */
+    }
+
+    .下拉导航栏:hover .下拉 {
+        display: block;
+        /* 将元素显示为块级元素 */
+    }
+
+    .头像 {
+        margin: auto;
+        /* 居中 */
+        margin-top: 20px;
+        /* 上外边距 */
+        /* background-image: linear-gradient(rgba(5, 0, 136, 0.5), rgba(5, 0, 136, 0.5)), */
+        /* background-image: linear-gradient(Pink,#66FFCC,#66CCFF), */
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 05, 0, 0.5)),
+            url(/Image/椎名真白.jpg);
+        /* 背景 */
+        background-size: 160px;
+        /* 背景尺寸 */
+        width: 160px;
+        height: 160px;
+        border-radius: 100%;
+        /* 圆 */
+    }
+
+    .标签页 {
+        margin: auto;
+        /* 居中 */
+        margin-top: 20px;
+        /* 上外边距 */
+        width: 80%;
+    }
+
+    .标签 {
+        margin: auto;
+        /* 居中 */
+        /* margin-top: 20px; */
+        /* 上外边距 */
+        padding: 20px;
+        /* 内边距 */
+        background-image: linear-gradient(to right, rgba(255, 255, 255, .6), rgba(255, 255, 255, .3), rgba(255, 255, 255, .2));
+        /* 背景、一个毛玻璃效果 */
+        width: 80%;
+        border-radius: 10px;
+        /* 圆角 */
+        text-align: center;
+        /* 文字居中 */
+    }
+
+    .标签 div {
+        display: inline-block;
+        /* 行内块 */
+        /* font-size: 20px; */
+        margin: 4px;
+        /* 外边距 */
+        padding: 4px;
+        /* 内边距 */
+        background-color: rgba(0, 0, 0, 05);
+        /* 背景颜色 */
+        /* border: 1px solid #66CCFF; */
+        /* 边框 */
+        border-radius: 10px;
+        /* 圆角 */
+        /* text-align: center; */
+        /* 文字居中 */
+        color: white;
+        /* 颜色 */
+        cursor: pointer;
+        /* 设定鼠标的形状为一只伸出食指的手 */
+    }
+
+    .标签 div:hover {
+        background-color: white;
+        /* 背景颜色 */
+        color: #66CCFF;
+        /* 颜色 */
+    }
+
+    .工具提示 {
+        position: relative;
+        /* 相对定位 */
+        display: inline-block;
+        /* 行内块 */
+        /* border-bottom: 1px dotted black; */
+        /* 边框-下 */
+    }
+
+    .工具提示 .工具提示文本 {
+        visibility: hidden;
+        /* 隐藏元素 */
+        width: 160px;
+        margin: 30px -100px;
+        background-color: #66CCFF;
+        /* 背景颜色 */
+        color: #66FFCC;
+        /* 颜色 */
+        /* text-align: center; */
+        /* 文字居中 */
+        border-radius: 10px;
+        /* 圆角 */
+        padding: 6px 6px;
+        /* 内边距 */
+        position: absolute;
+        /* 定位 */
+        z-index: 1;
+        /* 图层 */
+    }
+
+    .工具提示:hover .工具提示文本 {
+        visibility: visible;
+        /* 使元素可见 */
+    }
+
+    .解释 {
+        margin: auto;
+        /* 居中 */
+        margin-top: 20px;
+        /* 外边距 */
+        width: 80%;
+    }
+
+    .解释 div {
+        margin: auto;
+        /* 居中 */
+        padding: 20px;
+        /* 内边距 */
+        background-image: linear-gradient(to right, rgba(255, 255, 255, .6), rgba(255, 255, 255, .3), rgba(255, 255, 255, .2));
+        /* 背景，毛玻璃 */
+        width: 80%;
+        border-radius: 10px;
+        /* 圆角 */
+        font-size: 18px;
+        /* 文字尺寸 */
+    }
+
+    @media screen and (max-width: 800px) {
+        .标签页 {
+            width: 100%;
+        }
+
+        .标签 {
+            width: 90%;
+        }
+
+        .解释 {
+            width: 100%;
+        }
+
+        .解释 div {
+            width: 90%;
+        }
+    }
+</style>
+
+<body>
+    <div class="导航">
+        <div class="导航-标识">
+            <img title="随手一画的图标" src="/Image/favicon.ico">
+            <span title="这是伺佰,他很没有梦想">关于伺佰</span>
+        </div>
+        <div class="导航-导航栏">
+            <li title="事实上的返回"><a href="../index.html">主页</a>
+            </li>
+            <li title="伺佰的游戏盒"><a href="/html/Game.html">Game</a></li>
+            <li title="伺佰的工具箱"><a href="/html/工具.html">工具</a></li>
+            <li title="没的有的"><a href="/html/有的没的.html">有的没的</a>
+            </li>
+            <li class="下拉导航栏" title="在做了"><a href="#">语言</a>
+                <ul class="下拉">
+                    <li><a href="">中文</a></li>
+                    <li><a href="">English</a></li>
+                    <li><a href="">日本語</a></li>
+                    <li><a href="">Русский</a></li>
+                </ul>
+            </li>
+        </div>
+    </div>
+    <div title="一个过气头像" class="头像"></div>
+    <div class="标签页">
+        <div class="标签">
+            <div class="工具提示">轻音乐<span class="工具提示文本">赛高</span></div>
+            <div class="工具提示">泛二次元<span class="工具提示文本">太广泛了啊喂！</span></div>
+            <div class="工具提示">眼镜<span class="工具提示文本">摘下会有神奇的力量</span></div>
+            <div class="工具提示">崩坏3<span class="工具提示文本">没有人会拒绝战力爆棚的小姐姐，没有人！</span></div>
+            <div class="工具提示">EU4<span class="工具提示文本">错的不是我，是整个大明</span></div>
+            <div class="工具提示">冒险<span class="工具提示文本">随时准备这</span></div>
+            <div class="工具提示">初音未来<span class="工具提示文本">きみとふたりでいたんだぜ</span></div>
+            <div class="工具提示">粉色<span class="工具提示文本">首选色调</span></div>
+            <div class="工具提示">齿轮<span class="工具提示文本">美不胜收</span></div>
+            <div class="工具提示">社死<span class="工具提示文本">地球上的生活真是丰富多彩</span></div>
+            <div class="工具提示">咸鱼<span class="工具提示文本">躺平</span></div>
+        </div>
+    </div>
+    <div class="解释">
+        <div>
+            <h3 style="color: pink; text-shadow: 2px 2px 5px red; text-align: center; float: right;">Hi,欢迎！</h3>
+            <p>
+                很荣幸您能访问到我的网站！<br>
+                以下是该网站的现状：<br>
+                这是一个年轻的网站建立于2022年2月9日。<br>
+                网站的开发者仍在学习中(很多方面）。<br>
+                Sibai的站现在是一个纯Html和CSS代码构成的网站。
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>
