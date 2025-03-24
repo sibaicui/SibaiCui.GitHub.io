@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "项目管理系统密码保护",
+  "version": "1.0",
+  "description": "固定密码验证以访问项目管理系统。",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "http://localhost:3000/"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://192.168.152.169:3000/%E5%BC%80%E6%94%BE%E6%96%87%E4%BB%B6/%E7%99%BB%E5%BD%95%E9%A1%B5%E9%9D%A2.html"
+      ],
+      "js": [
+        "inject.js"
+      ]
+    }
+  ],
+  "icons": {}
+}

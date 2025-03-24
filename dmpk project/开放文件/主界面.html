@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>药代项目管理系统 - 主界面</title>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* 标题栏 */
+        .header {
+            width: 100%;
+            background-color: #ffffff;
+            color: #333;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            font-size: 24px;
+            font-weight: 700;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        /* 主容器 */
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            width: 600px;
+            max-width: 90%;
+            margin-top: 100px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #ff6f61, #ff9a9e);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .logout-button {
+            background: linear-gradient(135deg, #dc3545, #a71d2a);
+        }
+
+        .logout-button:hover {
+            background: linear-gradient(135deg, #a71d2a, #dc3545);
+        }
+
+        .error-message {
+            color: #ff4d4d;
+            font-size: 14px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .success-message {
+            color: green;
+            font-size: 14px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        /* 修改密码弹窗样式 */
+        #changePasswordModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+        }
+
+        #modalOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 标题栏 -->
+    <div class="header">药代项目管理系统</div>
+
+    <!-- 主容器 -->
+    <div class="container">
+        <h1>药代项目管理系统 - 主界面</h1>
+
+        <!-- 功能按钮 -->
+        <button onclick="显示修改密码弹窗()">修改密码</button>
+        <button onclick="跳转页面('项目进展页面.html')">项目进展管理</button>
+        <button onclick="跳转页面('项目资料页面.html')">项目资料管理</button>
+        <button onclick="跳转页面('项目进展审计追踪页面.html')">项目进展审计追踪</button>
+        <button onclick="跳转页面('项目资料审计追踪页面.html')">项目资料审计追踪</button>
+        <button onclick="跳转页面('工时.html')">工时（开发中）</button>
+        <button onclick="跳转页面('汇总面板.html')">汇总面板（开发中）</button>
+        <button class="logout-button" onclick="退出登录()">退出登录</button>
+
+        <!-- 错误/成功信息容器 -->
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+    </div>
+
+    <!-- 修改密码弹窗 -->
+    <div id="changePasswordModal">
+        <h2>修改密码</h2>
+        <div style="margin-bottom: 10px;">
+            <label for="oldPassword">旧密码：</label>
+            <input type="password" id="oldPassword" style="width: 90%; padding: 8px; margin-top: 5px;" />
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label for="newPassword">新密码：</label>
+            <input type="password" id="newPassword" style="width: 90%; padding: 8px; margin-top: 5px;" />
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <button id="confirmButton" onclick="确认修改密码()">确认</button>
+            <button onclick="关闭弹窗()">取消</button>
+        </div>
+    </div>
+
+    <!-- 遮罩层 -->
+    <div id="modalOverlay"></div>
+
+    <script>
+        // 检查是否已登录
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('请先登录！');
+            window.location.href = '/开放文件/登录页面.html';
+        }
+
+        // 跳转到指定页面
+        function 跳转页面(页面路径) {
+            window.location.href = `/开放文件/${页面路径}`;
+        }
+
+        // 显示修改密码弹窗
+        function 显示修改密码弹窗() {
+            document.getElementById('changePasswordModal').style.display = 'block';
+            document.getElementById('modalOverlay').style.display = 'block';
+        }
+
+        // 关闭弹窗
+        function 关闭弹窗() {
+            document.getElementById('changePasswordModal').style.display = 'none';
+            document.getElementById('modalOverlay').style.display = 'none';
+            // 清空输入框
+            document.getElementById('oldPassword').value = '';
+            document.getElementById('newPassword').value = '';
+        }
+
+        // 确认修改密码
+        async function 确认修改密码() {
+            const 确认按钮 = document.getElementById('confirmButton');
+            确认按钮.disabled = true;
+            确认按钮.textContent = '正在提交...';
+
+            const 旧密码 = document.getElementById('oldPassword').value;
+            const 新密码 = document.getElementById('newPassword').value;
+
+            if (!旧密码 || !新密码) {
+                显示错误信息('旧密码和新密码不能为空');
+                确认按钮.disabled = false;
+                确认按钮.textContent = '确认';
+                return;
+            }
+
+            try {
+                const 响应 = await fetch('/修改密码', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': token
+                    },
+                    body: JSON.stringify({ 旧密码, 新密码 })
+                });
+
+                const 数据 = await 响应.json();
+                if (数据.成功) {
+                    显示成功信息('密码修改成功，请重新登录！');
+                    setTimeout(() => {
+                        localStorage.removeItem('token');
+                        window.location.href = '/开放文件/登录页面.html';
+                    }, 2000);
+                } else if (数据.错误 === '旧密码错误') {
+                    显示错误信息('旧密码错误，请重新输入');
+                } else if (数据.错误 === '新密码与旧密码相同') {
+                    显示错误信息('新密码不能与旧密码相同');
+                } else {
+                    显示错误信息('密码修改失败，请稍后重试');
+                }
+            } catch (错误) {
+                显示错误信息('服务器连接失败，请检查网络');
+            } finally {
+                确认按钮.disabled = false;
+                确认按钮.textContent = '确认';
+            }
+
+            关闭弹窗();
+        }
+
+        // 退出登录
+        function 退出登录() {
+            localStorage.removeItem('token'); // 清除token
+            window.location.href = '/开放文件/登录页面.html'; // 返回登录页面
+        }
+
+        // 显示错误信息
+        function 显示错误信息(消息) {
+            const 错误容器 = document.getElementById('errorMessage');
+            错误容器.textContent = 消息;
+        }
+
+        // 显示成功信息
+        function 显示成功信息(消息) {
+            const 成功容器 = document.getElementById('successMessage');
+            成功容器.textContent = 消息;
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>药代项目管理系统 - 项目资料审计追踪</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+        }
+
+        .header {
+            width: 100%;
+            background-color: #ffffff;
+            color: #ff6f61;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            font-size: 24px;
+            font-weight: 700;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            width: 90%;
+            max-width: 90%;
+            margin-top: 100px;
+            text-align: center;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding-top: 120px;
+        }
+
+        button {
+            width: auto;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #ff6f61, #ff9a9e);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin: 5px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #ff6f61;
+            color: white;
+            font-weight: bold;
+        }
+
+        .search-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            max-width: 300px;
+            width: 50%;
+            padding: 10px;
+            margin-right: 10px;
+            border: 2px solid #ff9a9e;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #ff6f61;
+            outline: none;
+        }
+
+        .error-message {
+            color: #ff4d4d;
+            font-size: 14px;
+            margin-top: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">药代项目管理系统</div>
+    <div class="container">
+        <h1>项目资料审计追踪</h1>
+        <button onclick="返回主界面()">返回主界面</button>
+        <div class="search-group">
+            <input type="text" id="searchInput" class="search-input" placeholder="请输入搜索内容">
+            <button onclick="搜索审计追踪()">搜索</button>
+            <button onclick="取消搜索()">取消搜索</button>
+        </div>
+        <div id="errorMessage" class="error-message"></div>
+        <table id="审计追踪表格">
+            <thead>
+                <tr>
+                    <th>操作</th>
+                    <th>时间</th>
+                    <th>用户</th>
+                    <th>详情</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('请先登录！');
+            window.location.href = '/开放文件/登录页面.html';
+        }
+
+        async function 加载审计追踪() {
+            try {
+                const 响应 = await fetch('/获取项目资料审计追踪', {
+                    method: 'GET',
+                    headers: { 'Authorization': token }
+                });
+                const 数据 = await 响应.json();
+                console.log('接收到的数据:', 数据);
+                if (Array.isArray(数据)) {
+                    渲染表格(数据);
+                } else {
+                    显示错误信息('数据格式错误');
+                }
+            } catch (错误) {
+                显示错误信息('服务器连接失败，请检查网络');
+            }
+        }
+
+        function 渲染表格(数据) {
+            const 表格体 = document.querySelector('#审计追踪表格 tbody');
+            表格体.innerHTML = '';
+            const 有效数据 = 数据.filter(记录 =>
+                记录.操作 && 记录.时间 && 记录.用户 && typeof 记录.详情 === 'string'
+            );
+            有效数据.sort((a, b) => new Date(b.时间) - new Date(a.时间));
+            if (有效数据.length === 0) {
+                const 行 = document.createElement('tr');
+                行.innerHTML = `<td colspan="4">暂无数据</td>`;
+                表格体.appendChild(行);
+                return;
+            }
+            有效数据.forEach(记录 => {
+                const 行 = document.createElement('tr');
+                const 时间 = 记录.时间 ? new Date(记录.时间).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' }) : '未知时间';
+                let 旧数据 = '无';
+                let 新数据 = '无';
+                try {
+                    const 详情对象 = JSON.parse(记录.详情);
+                    旧数据 = 详情对象.旧数据 ? JSON.stringify(详情对象.旧数据, null, 2) : '无';
+                    新数据 = 详情对象.新数据 ? JSON.stringify(详情对象.新数据, null, 2) : '无';
+                } catch (错误) {
+                    console.error('详情解析失败:', 错误);
+                }
+                行.innerHTML = `
+            <td>${记录.操作}</td>
+            <td>${时间}</td>
+            <td>${记录.用户}</td>
+            <td><pre>${旧数据} -> ${新数据}</pre></td>
+        `;
+                表格体.appendChild(行);
+            });
+        }
+
+        function 搜索审计追踪() {
+            const 输入值 = document.getElementById('searchInput').value.toLowerCase();
+            const 表格体 = document.querySelector('#审计追踪表格 tbody');
+            const 行 = 表格体.getElementsByTagName('tr');
+            for (let i = 0; i < 行.length; i++) {
+                const 单元格 = 行[i].getElementsByTagName('td');
+                let 匹配 = false;
+                for (let j = 0; j < 单元格.length; j++) {
+                    if (单元格[j].textContent.toLowerCase().indexOf(输入值) > -1) {
+                        匹配 = true;
+                        break;
+                    }
+                }
+                if (匹配) {
+                    行[i].style.display = '';
+                } else {
+                    行[i].style.display = 'none';
+                }
+            }
+        }
+
+        function 取消搜索() {
+            const 表格体 = document.querySelector('#审计追踪表格 tbody');
+            const 行 = 表格体.getElementsByTagName('tr');
+            for (let i = 0; i < 行.length; i++) {
+                行[i].style.display = '';
+            }
+            document.getElementById('searchInput').value = '';
+        }
+
+        function 返回主界面() {
+            window.location.href = '/开放文件/主界面.html';
+        }
+
+        function 显示错误信息(消息) {
+            const 错误容器 = document.getElementById('errorMessage');
+            错误容器.textContent = 消息;
+        }
+
+        加载审计追踪();
+    </script>
+</body>
+
+</html>

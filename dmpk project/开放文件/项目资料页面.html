@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>药代项目管理系统 - 项目资料管理</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+        }
+
+        .header {
+            width: 100%;
+            background-color: #ffffff;
+            color: #ff6f61;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            font-size: 24px;
+            font-weight: 700;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            width: 90%;
+            max-width: 90%;
+            margin-top: 100px;
+            text-align: center;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding-top: 120px;
+        }
+
+        button {
+            width: auto;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #ff6f61, #ff9a9e);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin: 5px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        button.delete-button {
+            background: linear-gradient(135deg, #dc3545, #a71d2a);
+        }
+
+        button.delete-button:hover {
+            background: linear-gradient(135deg, #a71d2a, #dc3545);
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            max-height: 650px;
+            overflow-y: auto;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h3 {
+            color: #ff6f61;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #555;
+            margin: 5px 0;
+            word-wrap: break-word;
+            white-space: pre-line;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        fieldset {
+            border: 2px solid #ff9a9e;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        legend {
+            color: #ff6f61;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #ff6f61;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 90%;
+            padding: 10px;
+            border: 2px solid #ff9a9e;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="date"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #ff6f61;
+            outline: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: rgba(255, 255, 255, 0.9);
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 16px;
+            width: 600px;
+            max-width: 90%;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #ff6f61;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            overflow-y: auto;
+            max-height: 40%;
+        }
+
+        .close:hover {
+            color: #a71d2a;
+        }
+
+        .error-message {
+            color: #ff4d4d;
+            font-size: 14px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .search-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            max-width: 300px;
+            width: 50%;
+            padding: 10px;
+            margin-right: 10px;
+            border: 2px solid #ff9a9e;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #ff6f61;
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">药代项目管理系统</div>
+    <div class="container">
+        <h1>项目资料管理</h1>
+        <button onclick="返回主界面()">返回主界面</button>
+        <button onclick="显示添加项目模态对话框()">添加资料</button>
+        <button onclick="导出表格()">导出表格</button>
+        <div class="search-group">
+            <input type="text" id="searchInput" class="search-input" placeholder="请输入搜索内容">
+            <button onclick="搜索项目()">搜索</button>
+            <button onclick="取消搜索()">取消搜索</button>
+        </div>
+        <div id="errorMessage" class="error-message"></div>
+        <div id="项目卡片容器" class="card-container">
+        </div>
+    </div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="隐藏模态对话框()">&times;</span>
+            <h2 id="modal-title">添加资料</h2>
+            <form id="项目表单">
+                <fieldset>
+                    <legend>基本信息</legend>
+                    <label for="组">组：</label>
+                    <select id="组" name="组" required>
+                        <option value="">请选择</option>
+                        <option value="大分子组">大分子组</option>
+                        <option value="小分子组">小分子组</option>
+                    </select><br>
+                    <label for="资料类型">资料类型：</label>
+                    <select id="资料类型" name="资料类型" required>
+                        <option value="">请选择</option>
+                        <option value="研究报告">尽调</option>
+                        <option value="实验记录">申报资料撰写</option>
+                        <option value="其他资料">立项申请</option>
+                        <option value="其他资料">PDE撰写</option>
+                        <option value="其他资料">说明书审核</option>
+                        <option value="其他资料">其他</option>
+                    </select><br>
+                    <label for="项目类型">项目类型：</label>
+                    <select id="项目类型" name="项目类型" required>
+                        <option value="">请选择</option>
+                        <option value="化药">化药</option>
+                        <option value="ADC">ADC</option>
+                        <option value="小核酸">小核酸</option>
+                        <option value="多肽">多肽</option>
+                        <option value="改良2.1">改良2.1</option>
+                        <option value="改良2.2">改良2.2</option>
+                        <option value="改良2.3">改良2.3</option>
+                        <option value="改良2.4">改良2.4</option>
+                        <option value="化3">化3</option>
+                        <option value="化4">化4</option>
+                        <option value="生物类似药">生物类似药</option>
+                        <option value="一致性评价">一致性评价</option>
+                        <option value="ANDA">ANDA</option>
+                        <option value="国际注册">国际注册</option>
+                    </select><br>
+                    <label for="项目名称代号">项目名称/代号：</label>
+                    <input type="text" id="项目名称代号" name="项目名称代号" required><br>
+                    <label for="项目信息">项目信息：</label>
+                    <textarea id="项目信息" name="项目信息" rows="3" placeholder="非临床PL、靶点、适应症、相关种属、转入药代时间" required></textarea><br>
+                </fieldset>
+                <fieldset>
+                    <legend>资料详情</legend>
+                    <label for="填写人员">填写人员：</label>
+                    <input type="text" id="填写人员" name="填写人员" required><br>
+                    <label for="关键节点">关键节点：</label>
+                    <input type="text" id="关键节点" name="关键节点" required><br>
+                    <label for="项目进展">项目进展：</label>
+                    <textarea id="项目进展" name="项目进展" rows="3" required></textarea><br>
+                    <label for="归档日期">归档日期：</label>
+                    <input type="date" id="归档日期" name="归档日期"><br>
+                    <label for="备注">备注：</label>
+                    <textarea id="备注" name="备注" rows="3"></textarea><br>
+                </fieldset>
+                <button type="submit">提交</button>
+                <button type="button" onclick="隐藏模态对话框()">取消</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('请先登录！');
+            window.location.href = '/开放文件/登录页面.html';
+        }
+        let 当前编辑项目 = null;
+        let 项目数据 = [];
+        let 当前用户 = {};
+        async function 获取当前用户() {
+            try {
+                const 响应 = await fetch('/获取当前用户', {
+                    method: 'GET',
+                    headers: { 'Authorization': token }
+                });
+                const 数据 = await 响应.json();
+                if (数据.成功) {
+                    当前用户 = 数据.用户;
+                } else {
+                    显示错误信息(数据.错误 || '获取当前用户失败');
+                }
+            } catch (错误) {
+                显示错误信息('服务器连接失败，请检查网络');
+            }
+        }
+        async function 加载项目资料() {
+            try {
+                const 响应 = await fetch('/获取项目资料', {
+                    method: 'GET',
+                    headers: { 'Authorization': token }
+                });
+
+                const 数据 = await 响应.json();
+                if (数据.成功) {
+                    渲染卡片(数据.数据);
+                } else {
+                    显示错误信息(数据.错误 || '加载数据失败');
+                }
+            } catch (错误) {
+                显示错误信息('服务器连接失败，请检查网络');
+            }
+        }
+        function 渲染卡片(数据) {
+            项目数据 = 数据;
+            const 容器 = document.getElementById('项目卡片容器');
+            容器.innerHTML = '';
+            数据.sort((a, b) => new Date(b.创建时间) - new Date(a.创建时间));
+            数据.forEach(项目 => {
+                const 创建时间 = new Date(项目.创建时间).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' });
+                const 卡片 = document.createElement('div');
+                卡片.className = 'card';
+                卡片.innerHTML = `
+                    <h3>${项目.项目名称代号}</h3>
+                    <p><strong>组：</strong>${项目.组}</p>
+                    <p><strong>资料类型：</strong>${项目.资料类型}</p>
+                    <p><strong>项目类型：</strong>${项目.项目类型}</p>
+                    <p><strong>项目信息：</strong>${项目.项目信息}</p>
+                    <p><strong>填写人员：</strong>${项目.填写人员}</p>
+                    <p><strong>关键节点：</strong>${项目.关键节点}</p>
+                    <p><strong>项目进展：</strong>${项目.项目进展}</p>
+                    <p><strong>归档日期：</strong>${项目.归档日期}</p>
+                    <p><strong>备注：</strong>${项目.备注}</p>
+                    <p><strong>创建时间：</strong>${创建时间}</p>
+                    <div class="actions">
+                        <button onclick="编辑项目('${项目.ID}')">编辑</button>
+                        <button class="delete-button" onclick="删除项目('${项目.ID}')">删除</button>
+                    </div>
+                `;
+                容器.appendChild(卡片);
+            });
+        }
+        function 显示模态对话框() {
+            console.log('显示模态对话框被调用');
+            document.getElementById('modal').style.display = 'block';
+        }
+        function 隐藏模态对话框() {
+            console.log('隐藏模态对话框被调用');
+            document.getElementById('modal').style.display = 'none';
+            document.getElementById('项目表单').reset();
+            当前编辑项目 = null;
+        }
+        function 显示添加项目模态对话框() {
+            当前编辑项目 = null;
+            document.getElementById('modal-title').textContent = '添加资料';
+            document.getElementById('项目表单').reset();
+            显示模态对话框();
+        }
+        function 编辑项目(项目ID) {
+            const 项目 = 项目数据.find(项目 => 项目.ID === 项目ID);
+            if (项目) {
+                当前编辑项目 = 项目ID;
+                document.getElementById('modal-title').textContent = '编辑资料';
+                function 设置下拉菜单值(id, value) {
+                    const selectElement = document.getElementById(id);
+                    const trimmedValue = String(value).trim();
+                    for (let i = 0; i < selectElement.options.length; i++) {
+                        if (selectElement.options[i].value.trim() === trimmedValue) {
+                            selectElement.options[i].selected = true;
+                            break;
+                        }
+                    }
+                }
+                设置下拉菜单值('组', String(项目.组).trim());
+                设置下拉菜单值('资料类型', String(项目.资料类型).trim());
+                设置下拉菜单值('项目类型', String(项目.项目类型).trim());
+                document.getElementById('项目名称代号').value = 项目.项目名称代号;
+                document.getElementById('项目信息').value = 项目.项目信息;
+                document.getElementById('填写人员').value = 项目.填写人员;
+                document.getElementById('关键节点').value = 项目.关键节点;
+                document.getElementById('项目进展').value = 项目.项目进展;
+                document.getElementById('归档日期').value = 项目.归档日期;
+                document.getElementById('备注').value = 项目.备注;
+                显示模态对话框();
+            }
+        }
+        document.getElementById('项目表单').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const 新项目 = {
+                组: document.getElementById('组').value.trim(),
+                资料类型: document.getElementById('资料类型').value.trim(),
+                项目类型: document.getElementById('项目类型').value.trim(),
+                项目名称代号: document.getElementById('项目名称代号').value.trim(),
+                项目信息: document.getElementById('项目信息').value.trim(),
+                填写人员: document.getElementById('填写人员').value.trim(),
+                关键节点: document.getElementById('关键节点').value.trim(),
+                项目进展: document.getElementById('项目进展').value.trim(),
+                归档日期: document.getElementById('归档日期').value.trim(),
+                备注: document.getElementById('备注').value.trim(),
+                创建时间: new Date().toISOString(),
+                创建人: 当前用户.用户名,
+            };
+            if (!新项目.项目名称代号 || !新项目.组) {
+                显示错误信息('所有必填字段均为必填项');
+                return;
+            }
+            try {
+                const 请求路径 = 当前编辑项目 ? '/修改项目资料' : '/添加项目资料';
+                const 请求方法 = 当前编辑项目 ? 'PUT' : 'POST';
+                const 响应 = await fetch(请求路径, {
+                    method: 请求方法,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': token
+                    },
+                    body: JSON.stringify({
+                        ...新项目,
+                        ...(当前编辑项目 && { ID: 当前编辑项目 })
+                    })
+                });
+                const 数据 = await 响应.json();
+                if (数据.成功) {
+                    隐藏模态对话框();
+                    加载项目资料();
+                } else {
+                    显示错误信息(数据.错误 || '操作失败');
+                }
+            } catch (错误) {
+                显示错误信息('服务器连接失败，请检查网络');
+            }
+        });
+        async function 删除项目(项目ID) {
+            if (!confirm('确定要删除该资料吗？')) {
+                return;
+            }
+            try {
+                const 响应 = await fetch(`/删除项目资料?ID=${项目ID}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': token }
+                });
+                const 数据 = await 响应.json();
+                if (数据.成功) {
+                    加载项目资料();
+                } else {
+                    显示错误信息(数据.错误 || '删除失败');
+                }
+            } catch (错误) {
+                显示错误信息('服务器连接失败，请检查网络');
+            }
+        }
+        function 搜索项目() {
+            const 输入值 = document.getElementById('searchInput').value.toLowerCase();
+            const 卡片容器 = document.getElementById('项目卡片容器');
+            const 卡片列表 = 卡片容器.getElementsByClassName('card');
+            for (let i = 0; i < 卡片列表.length; i++) {
+                const 卡片 = 卡片列表[i];
+                const 文本内容 = 卡片.textContent.toLowerCase();
+                if (文本内容.indexOf(输入值) > -1) {
+                    卡片.style.display = '';
+                } else {
+                    卡片.style.display = 'none';
+                }
+            }
+        }
+        function 取消搜索() {
+            const 卡片容器 = document.getElementById('项目卡片容器');
+            const 卡片列表 = 卡片容器.getElementsByClassName('card');
+            for (let i = 0; i < 卡片列表.length; i++) {
+                卡片列表[i].style.display = '';
+            }
+            document.getElementById('searchInput').value = '';
+        }
+        function 导出表格() {
+            const 临时表格 = document.createElement('table');
+            const 表头 = document.createElement('thead');
+            表头.innerHTML = `
+        <tr>
+            <th>组</th>
+            <th>资料类型</th>
+            <th>项目类型</th>
+            <th>项目名称代号</th>
+            <th>项目信息</th>
+            <th>填写人员</th>
+            <th>关键节点</th>
+            <th>项目进展</th>
+            <th>归档日期</th>
+            <th>备注</th>
+            <th>创建时间</th>
+            <th>创建人</th>
+        </tr>
+    `;
+            临时表格.appendChild(表头);
+            const 表体 = document.createElement('tbody');
+            项目数据.forEach(项目 => {
+                const 创建时间 = new Date(项目.创建时间).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' });
+                const 行 = document.createElement('tr');
+                行.innerHTML = `
+            <td>${项目.组}</td>
+            <td>${项目.资料类型}</td>
+            <td>${项目.项目类型}</td>
+            <td>${项目.项目名称代号}</td>
+            <td>${项目.项目信息}</td>
+            <td>${项目.填写人员}</td>
+            <td>${项目.关键节点}</td>
+            <td>${项目.项目进展}</td>
+            <td>${项目.归档日期}</td>
+            <td>${项目.备注}</td>
+            <td>${创建时间}</td>
+            <td>${项目.创建人}</td>
+        `;
+                表体.appendChild(行);
+            });
+            临时表格.appendChild(表体);
+            const 工作簿 = XLSX.utils.table_to_book(临时表格, { sheet: "项目资料" });
+            const 文件名 = '项目资料.xlsx';
+            XLSX.writeFile(工作簿, 文件名);
+        }
+        function 返回主界面() {
+            window.location.href = '/开放文件/主界面.html';
+        }
+        function 显示错误信息(消息) {
+            const 错误容器 = document.getElementById('errorMessage');
+            错误容器.textContent = 消息;
+        }
+        window.addEventListener('DOMContentLoaded', (event) => {
+            获取当前用户();
+            加载项目资料();
+        });
+    </script>
+    <script src="/开放文件/xlsx.full.min.js"></script>
+</body>
+
+</html>
