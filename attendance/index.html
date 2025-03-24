@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>秋杰姐的考勤工具</title>
+    <style>
+        body {
+            background-color: #fffaf0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        h1 {
+            color: #ff69b4;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #d4edda;
+            text-align: left;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .有数据 {
+            background-color: #e6f7ff;
+        }
+
+        .无数据 {
+            background-color: #ffe6e6;
+        }
+
+        .筛选输入框 {
+            margin-bottom: 5px;
+            border-radius: 5px;
+            padding: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .显示有数据按钮,
+        .取消筛选按钮,
+        .搜索按钮 {
+            margin-left: 5px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .显示有数据按钮 {
+            background-color: #d4edda;
+            color: #333;
+        }
+
+        .取消筛选按钮 {
+            background-color: #ffe6e6;
+            color: #333;
+        }
+
+        .搜索按钮 {
+            background-color: #d4edda;
+            color: #333;
+        }
+
+        td:nth-child(-n+5) {
+            position: sticky;
+            left: 0;
+            background-color: #d4edda;
+            z-index: 2;
+        }
+
+        td:nth-child(1) {
+            left: 0;
+        }
+
+        td:nth-child(2) {
+            left: 80px;
+        }
+
+        td:nth-child(3) {
+            left: 200px;
+        }
+
+        td:nth-child(4) {
+            left: 300px;
+        }
+
+        td:nth-child(5) {
+            left: 400px;
+        }
+
+        .可编辑单元格 input {
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 5px;
+            padding: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .可编辑单元格 button {
+            margin-left: 5px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .可编辑单元格 button[data-action="save"] {
+            background-color: #d4edda;
+            color: #333;
+        }
+
+        .可编辑单元格 button[data-action="cancel"] {
+            background-color: #ffe6e6;
+            color: #333;
+        }
+
+        #控制容器 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #控制容器 form {
+            display: inline-block;
+        }
+
+        #控制容器 button {
+            margin: 5px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #导出JSON按钮,
+        #导出Excel按钮,
+        #导出考勤符号表按钮 {
+            background-color: #d4edda;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>秋杰姐的考勤工具</h1>
+    <div id="控制容器">
+        <form id="上传表单" enctype="multipart/form-data">
+            <input type="file" id="文件输入框" name="files" accept=".xlsx" />
+            <button type="submit">上传文件</button>
+            <button id="导出JSON按钮">导出 JSON</button>
+            <button id="导出Excel按钮">导出 Excel</button>
+            <button id="导出考勤符号表按钮">导出考勤符号表</button>
+        </form>
+    </div>
+    <table id="数据表格">
+        <thead>
+            <tr id="表头行"></tr>
+        </thead>
+        <tbody id="数据体"></tbody>
+    </table>
+    <script src="xlsx.full.min.js"></script>
+    <script>
+        let 当前筛选条件 = {};
+        let 显示数据筛选条件 = {};
+        let 原始数据 = [];
+        let 显示数据 = [];
+
+        // 上传文件事件
+        document.getElementById('上传表单').addEventListener('submit', async (事件) => {
+            事件.preventDefault();
+            const 表单数据 = new FormData(事件.target);
+            try {
+                const 响应 = await fetch('/api/upload-excel', {
+                    method: 'POST',
+                    body: 表单数据
+                });
+                const 数据 = await 响应.json();
+                原始数据 = 数据;
+                显示数据 = [...数据];
+                localStorage.setItem('原始数据', JSON.stringify(原始数据));
+                生成表格(数据);
+            } catch (错误) {
+                console.error('上传文件时出错:', 错误);
+            }
+        });
+
+        // 生成表格
+        function 生成表格(数据) {
+            const 表头行 = document.getElementById('表头行');
+            const 数据体 = document.getElementById('数据体');
+            表头行.innerHTML = '';
+            数据体.innerHTML = '';
+            if (数据.length === 0) {
+                const 无数据行 = document.createElement('tr');
+                const 无数据单元格 = document.createElement('td');
+                无数据单元格.colSpan = "100%";
+                无数据单元格.textContent = "没有匹配的数据";
+                无数据单元格.style.textAlign = "center";
+                无数据行.appendChild(无数据单元格);
+                数据体.appendChild(无数据行);
+                return;
+            }
+            Object.keys(数据[0]).forEach(字段 => {
+                const 表头单元格 = document.createElement('th');
+                表头单元格.textContent = 字段;
+                const 筛选输入框 = document.createElement('input');
+                筛选输入框.type = 'text';
+                筛选输入框.className = '筛选输入框';
+                筛选输入框.placeholder = `筛选 ${字段}`;
+                筛选输入框.dataset.field = 字段;
+                const 搜索按钮 = document.createElement('button');
+                搜索按钮.textContent = '搜索';
+                搜索按钮.className = '搜索按钮';
+                const 显示有数据按钮 = document.createElement('button');
+                显示有数据按钮.textContent = '显示有数据';
+                显示有数据按钮.className = '显示有数据按钮';
+                显示有数据按钮.dataset.field = 字段;
+                const 取消筛选按钮 = document.createElement('button');
+                取消筛选按钮.textContent = '取消筛选';
+                取消筛选按钮.className = '取消筛选按钮';
+                表头单元格.appendChild(筛选输入框);
+                表头单元格.appendChild(搜索按钮);
+                表头单元格.appendChild(显示有数据按钮);
+                表头单元格.appendChild(取消筛选按钮);
+                表头行.appendChild(表头单元格);
+            });
+            数据.forEach((行, 行索引) => {
+                const 行元素 = document.createElement('tr');
+                let 有数据 = false;
+                Object.entries(行).forEach(([字段, 值], 索引) => {
+                    const 单元格 = document.createElement('td');
+                    单元格.textContent = 值 || '';
+                    if (值.trim()) {
+                        有数据 = true;
+                    }
+                    单元格.addEventListener('dblclick', () => {
+                        编辑单元格(单元格, 行索引, 字段);
+                    });
+                    行元素.appendChild(单元格);
+                });
+                行元素.classList.add(有数据 ? '有数据' : '无数据');
+                数据体.appendChild(行元素);
+            });
+            const 搜索按钮列表 = document.querySelectorAll('.搜索按钮');
+            搜索按钮列表.forEach(按钮 => {
+                按钮.addEventListener('click', () => {
+                    const 输入框 = 按钮.previousElementSibling;
+                    const 筛选值 = 输入框.value.toLowerCase().trim();
+                    const 字段 = 输入框.dataset.field;
+                    当前筛选条件[字段] = 筛选值;
+                    应用筛选();
+                });
+            });
+            const 显示有数据按钮列表 = document.querySelectorAll('.显示有数据按钮');
+            显示有数据按钮列表.forEach(按钮 => {
+                按钮.addEventListener('click', () => {
+                    const 字段 = 按钮.dataset.field;
+                    应用显示有数据筛选(字段);
+                });
+            });
+            const 取消筛选按钮列表 = document.querySelectorAll('.取消筛选按钮');
+            取消筛选按钮列表.forEach(按钮 => {
+                按钮.addEventListener('click', () => {
+                    当前筛选条件 = {};
+                    显示数据筛选条件 = {};
+                    const 筛选输入框列表 = document.querySelectorAll('.筛选输入框');
+                    筛选输入框列表.forEach(输入框 => {
+                        输入框.value = '';
+                    });
+                    应用筛选();
+                });
+            });
+        }
+
+        // 应用筛选
+        function 应用筛选() {
+            const 筛选后数据 = 原始数据.filter(行 => {
+                for (const [字段, 值] of Object.entries(当前筛选条件)) {
+                    if (!行[字段]?.toLowerCase()?.includes(值.toLowerCase())) {
+                        return false;
+                    }
+                }
+                for (const 字段 in 显示数据筛选条件) {
+                    if (!行[字段]?.trim()) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+            if (筛选后数据.length === 0) {
+                alert("没有匹配的数据，已取消筛选");
+                当前筛选条件 = {};
+                显示数据筛选条件 = {};
+                const 筛选输入框列表 = document.querySelectorAll('.筛选输入框');
+                筛选输入框列表.forEach(输入框 => {
+                    输入框.value = '';
+                });
+                生成表格(原始数据);
+            } else {
+                显示数据 = 筛选后数据;
+                生成表格(显示数据);
+            }
+        }
+
+        // 应用显示有数据筛选
+        function 应用显示有数据筛选(字段) {
+            显示数据筛选条件[字段] = true;
+            应用筛选();
+        }
+
+        // 编辑单元格
+        function 编辑单元格(单元格, 行索引, 字段) {
+            const 原始值 = 显示数据[行索引][字段];
+            单元格.innerHTML = `
+                <input type="text" class="可编辑单元格" value="${原始值}" />
+                <button data-action="save" data-row="${行索引}" data-key="${字段}">保存</button>
+                <button data-action="cancel" data-old-value="${原始值}">取消</button>
+            `;
+            const 按钮列表 = 单元格.querySelectorAll('button');
+            按钮列表.forEach(按钮 => {
+                按钮.addEventListener('click', (事件) => 处理按钮事件(事件, 单元格));
+            });
+        }
+
+        // 处理按钮事件
+        function 处理按钮事件(事件, 单元格) {
+            事件.stopPropagation();
+            const 动作 = 事件.target.dataset.action;
+            const 行索引 = 事件.target.dataset.row;
+            const 字段 = 事件.target.dataset.key;
+            const 原始值 = 事件.target.dataset.oldValue;
+            if (动作 === 'save') {
+                保存编辑(事件, 单元格, 行索引, 字段);
+            } else if (动作 === 'cancel') {
+                取消编辑(事件, 单元格, 原始值);
+            }
+        }
+
+        // 保存编辑
+        function 保存编辑(事件, 单元格, 行索引, 字段) {
+            const 新值 = 单元格.querySelector('input').value;
+            原始数据[行索引][字段] = 新值;
+            显示数据[行索引][字段] = 新值;
+            单元格.textContent = 新值;
+            localStorage.setItem('原始数据', JSON.stringify(原始数据));
+        }
+
+        // 取消编辑
+        function 取消编辑(事件, 单元格, 原始值) {
+            单元格.textContent = 原始值;
+        }
+
+        // 导出 JSON
+        document.getElementById('导出JSON按钮').addEventListener('click', (事件) => {
+            事件.preventDefault();
+            导出JSON();
+        });
+
+        function 导出JSON() {
+            const 数据 = 原始数据.slice();
+            if (数据.length === 0) {
+                alert('没有数据可以导出');
+                return;
+            }
+            const JSON数据 = JSON.stringify(数据, null, 2);
+            const 二进制对象 = new Blob([JSON数据], { type: 'application/json' });
+            const 链接地址 = URL.createObjectURL(二进制对象);
+            const 下载链接 = document.createElement('a');
+            下载链接.href = 链接地址;
+            下载链接.download = '数据.json';
+            下载链接.click();
+            URL.revokeObjectURL(链接地址);
+            localStorage.setItem('原始数据', JSON.stringify(原始数据));
+        }
+
+        // 导出 Excel
+        document.getElementById('导出Excel按钮').addEventListener('click', (事件) => {
+            事件.preventDefault();
+            导出Excel();
+        });
+
+        function 导出Excel() {
+            const 数据 = 原始数据.slice();
+            if (数据.length === 0) {
+                alert('没有数据可以导出');
+                return;
+            }
+            const 工作簿 = XLSX.utils.book_new();
+            const 工作表 = XLSX.utils.json_to_sheet(数据);
+            XLSX.utils.book_append_sheet(工作簿, 工作表, 'Sheet1');
+            XLSX.writeFile(工作簿, '数据.xlsx');
+            localStorage.setItem('原始数据', JSON.stringify(原始数据));
+        }
+
+        // 导出考勤符号表
+        document.getElementById('导出考勤符号表按钮').addEventListener('click', (事件) => {
+            事件.preventDefault();
+            导出考勤符号表();
+        });
+
+        function 导出考勤符号表() {
+            const JSON数据 = 原始数据.slice();
+            if (JSON数据.length === 0) {
+                alert('没有数据可以导出');
+                return;
+            }
+            const 新表格数据 = {};
+            const 所有日期 = JSON数据.map(项 => new Date(项['日期']));
+            const 当月天数 = new Date(所有日期[0].getFullYear(), 所有日期[0].getMonth() + 1, 0).getDate();
+            JSON数据.forEach(项 => {
+                const 工号 = 项['工号'];
+                const 姓名 = 项['姓名'];
+                const 日期 = new Date(项['日期']);
+                const 天数 = 日期.getDate();
+                const 日期类型 = 项['日期类型'];
+                const 迟到分钟数 = parseFloat(项['迟到\n(分钟)'] || 0);
+                const 早退分钟数 = parseFloat(项['早退\n(分钟)'] || 0);
+                const 旷工天数 = parseFloat(项['旷工\n(天)'] || 0);
+                const 加班小时数 = parseFloat(项['加班小时数'] || 0);
+                const 病假天数 = parseFloat(项['病假\n(天)'] || 0);
+                const 事假天数 = parseFloat(项['事假\n(天)'] || 0);
+                const 年假天数 = parseFloat(项['年假\n(天)'] || 0);
+                const 因公出差天数 = parseFloat(项['因公出差\n(天)'] || 0);
+                const 陪产假天数 = parseFloat(项['陪产假\n(天)'] || 0);
+                const 产假天数 = parseFloat(项['产假\n(天)'] || 0);
+                const 换休天数 = parseFloat(项['换休\n(天)'] || 0);
+                const 育儿假天数 = parseFloat(项['育儿假\n(天)'] || 0);
+                if (!新表格数据[工号]) {
+                    新表格数据[工号] = {
+                        '职工编号': 工号,
+                        '日期名称': 姓名,
+                        'days': {}
+                    };
+                }
+                let 符号 = "";
+                if (日期类型 === "工作日") {
+                    if (迟到分钟数 > 5) { 符号 = "迟"; }
+                    else if (事假天数 > 0.5) { 符号 = "③"; }
+                    else if (早退分钟数 > 0) { 符号 = "退"; }
+                    else if (病假天数 > 0) { 符号 = "①"; }
+                    else if (事假天数 >= 0.1 && 事假天数 <= 0.5) { 符号 = "⒄"; }
+                    else if (年假天数 >= 0.1 && 年假天数 <= 0.5) { 符号 = "⒇"; }
+                    else if (年假天数 > 0.5) { 符号 = "⑿"; }
+                    else if (因公出差天数 >= 0.1 && 因公出差天数 <= 0.5) { 符号 = "#"; }
+                    else if (因公出差天数 >= 0.5) { 符号 = "④"; }
+                    else if (陪产假天数 > 0) { 符号 = "C"; }
+                    else if (产假天数 > 0) { 符号 = "②"; }
+                    else if (换休天数 > 0.4 && 换休天数 <= 1) { 符号 = "⑾"; }
+                    else if (换休天数 >= 0.1 && 换休天数 <= 0.4) { 符号 = "⒆"; }
+                    else if (育儿假天数 > 0) { 符号 = "⑹"; }
+                    else { 符号 = "∕"; }
+                } else if (日期类型 === "未排班") {
+                    if (加班小时数 >= 3.5 && 加班小时数 <= 8) { 符号 = "⒅"; }
+                    else if (加班小时数 >= 8) { 符号 = "∕"; }
+                    else { 符号 = "⑤"; }
+                }
+                新表格数据[工号]['days'][天数] = 符号;
+            });
+            const 新表格数组 = [['职工编号', '日期名称', ...Array.from({ length: 当月天数 }, (_, i) => `${i + 1}`)]];
+            Object.values(新表格数据).forEach(员工 => {
+                const 行 = [员工['职工编号'], 员工['日期名称']];
+                for (let i = 1; i <= 当月天数; i++) {
+                    行.push(员工['days'][i] || '');
+                }
+                新表格数组.push(行);
+            });
+            const 新工作簿 = XLSX.utils.book_new();
+            const 新工作表 = XLSX.utils.aoa_to_sheet(新表格数组);
+
+            // 定义黄色背景样式
+            const 黄色样式 = { fill: { fgColor: { rgb: "FFFF00" } } };
+
+            // 遍历数据并应用样式
+            新表格数组.forEach((行, 行索引) => {
+                行.forEach((单元格值, 列索引) => {
+                    // 跳过表头行、前两列以及值为 "∕" 的单元格
+                    if (行索引 > 0 && 列索引 > 1 && 单元格值 !== "∕") {
+                        const 单元格地址 = XLSX.utils.encode_cell({ r: 行索引, c: 列索引 });
+                        if (!新工作表[单元格地址]) 新工作表[单元格地址] = {};
+                        新工作表[单元格地址].s = 黄色样式; // 应用黄色样式
+                    }
+                });
+            });
+
+            XLSX.utils.book_append_sheet(新工作簿, 新工作表, '考勤符号表');
+            XLSX.writeFile(新工作簿, '考勤符号表.xlsx');
+            console.log('考勤符号表已生成并保存为考勤符号表.xlsx');
+            localStorage.setItem('原始数据', JSON.stringify(原始数据));
+        }
+    </script>
+</body>
+
+</html>
