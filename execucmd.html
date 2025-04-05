@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExecuCmd - 你的智能命令行小助手</title>
+    <style>
+        :root {
+            --primary: #ff9ff3;  /* 粉色 */
+            --secondary: #feca57; /* 黄色 */
+            --accent: #ff6b6b;   /* 珊瑚红 */
+            --light: #f7f1e3;    /* 奶油色 */
+            --dark: #57606f;     /* 深灰 */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #fff5f5;
+            color: #57606f;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(255, 155, 243, 0.2);
+            border-bottom: 3px dashed white;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+        
+        .tagline {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4rem 0;
+        }
+        
+        .hero-text {
+            flex: 1;
+            padding-right: 2rem;
+        }
+        
+        .hero-image {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 155, 243, 0.3);
+            border: 3px solid white;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin: 2rem 0 1rem;
+            color: var(--primary);
+            text-decoration: underline wavy var(--secondary);
+            text-underline-offset: 8px;
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            box-shadow: 0 4px 0 rgba(254, 202, 87, 0.5);
+        }
+        
+        .btn:hover {
+            background-color: #ffd166;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 0 rgba(254, 202, 87, 0.5);
+        }
+        
+        .btn-download {
+            background-color: var(--accent);
+            box-shadow: 0 4px 0 rgba(255, 107, 107, 0.5);
+            font-size: 1.2rem;
+            padding: 15px 30px;
+        }
+        
+        .btn-download:hover {
+            background-color: #ff8c8c;
+            box-shadow: 0 6px 0 rgba(255, 107, 107, 0.5);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding: 3rem 0;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(255, 155, 243, 0.1);
+            transition: transform 0.3s ease;
+            border: 2px dashed var(--primary);
+            text-align: center;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px) rotate(2deg);
+            box-shadow: 0 10px 20px rgba(255, 155, 243, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .demo {
+            background-color: var(--light);
+            padding: 4rem 0;
+            text-align: center;
+            border-radius: 20px;
+            margin: 2rem 0;
+            border: 3px dotted var(--secondary);
+        }
+        
+        .terminal {
+            background-color: #ffecf1;
+            color: #57606f;
+            border-radius: 15px;
+            padding: 1.5rem;
+            font-family: 'Courier New', monospace;
+            text-align: left;
+            max-width: 700px;
+            margin: 2rem auto;
+            box-shadow: 0 10px 30px rgba(255, 155, 243, 0.2);
+            border: 2px solid var(--primary);
+        }
+        
+        .terminal-header {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        
+        .terminal-btn {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .btn-red { background-color: #ff6b6b; }
+        .btn-yellow { background-color: #feca57; }
+        .btn-green { background-color: #1dd1a1; }
+        
+        .terminal-body {
+            line-height: 1.5;
+        }
+        
+        .prompt { color: var(--primary); font-weight: bold; }
+        .command { color: var(--dark); }
+        .output { color: var(--dark); }
+        
+        .download-section {
+            text-align: center;
+            padding: 3rem 0;
+            background: linear-gradient(135deg, #f7f1e3, #fff5f5);
+            border-radius: 20px;
+            margin: 2rem 0;
+        }
+        
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(255, 155, 243, 0.5);
+            animation: float 5s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-text {
+                padding-right: 0;
+                margin-bottom: 2rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 漂浮的爱心背景 -->
+    <div class="hearts" id="hearts"></div>
+    
+    <header>
+        <div class="container">
+            <div class="logo">ExecuCmd</div>
+            <div class="tagline">✨ 用可爱的语言控制你的电脑 ✨</div>
+            <a href="#download" class="btn btn-download">立即下载</a>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="hero">
+            <div class="hero-text">
+                <h1>让命令行变得超可爱！</h1>
+                <p>ExecuCmd 是你的魔法小助手，把枯燥的命令行变成甜甜的对话~</p>
+                <p>只需要像聊天一样说出你的需求，ExecuCmd就会帮你完成所有复杂的电脑操作！</p>
+                <a href="#features" class="btn">探索功能</a>
+            </div>
+            <div class="hero-image">
+                <img src="https://via.placeholder.com/500x350/ff9ff3/ffffff?text=ExecuCmd+少女版" alt="ExecuCmd可爱界面">
+            </div>
+        </section>
+        
+        <section id="features">
+            <h2>超能力功能</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>聊天式命令</h3>
+                    <p>像和朋友聊天一样告诉ExecuCmd你想做什么，它会帮你转换成专业命令</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>可爱界面</h3>
+                    <p>粉嫩配色和萌萌哒交互，让冰冷的命令行变得温暖又治愈</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>安全确认</h3>
+                    <p>每次执行命令前都会撒娇式地确认，防止不小心搞砸电脑</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>记忆小天才</h3>
+                    <p>记得你们之前的对话，不用每次都从头解释</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="demo" class="demo">
+            <h2>来玩一玩吧</h2>
+            <p>看看ExecuCmd能帮你做什么有趣的事情~</p>
+            
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-btn btn-red"></div>
+                    <div class="terminal-btn btn-yellow"></div>
+                    <div class="terminal-btn btn-green"></div>
+                </div>
+                <div class="terminal-body">
+                    <div><span class="prompt">(◕‿◕✿)</span> <span class="command">帮我打开B站看看番剧</span></div>
+                    <div class="output">ExecuCmd: 好哒~马上帮你打开B站！</div>
+                    <div class="output">【解释器开始】powershell.exe【解释器结束】</div>
+                    <div class="output">【脚本开始】Start-Process "https://www.bilibili.com"【脚本结束】</div>
+                    <br>
+                    <div><span class="prompt">(◕‿◕✿)</span> <span class="command">我的电脑信息是什么呀？</span></div>
+                    <div class="output">ExecuCmd: 让我看看你的电脑信息哦~</div>
+                    <div class="output">【解释器开始】powershell.exe【解释器结束】</div>
+                    <div class="output">【脚本开始】Get-ComputerInfo | Select-Object OsName, OsVersion, CsNumberOfProcessors, CsTotalPhysicalMemory【脚本结束】</div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="download" class="download-section">
+            <h2>获取 ExecuCmd</h2>
+            <p>专为Windows系统打造的可爱命令行助手</p>
+            
+            <div style="margin-top: 2rem;">
+                <a href="#" class="btn btn-download">下载 Windows 版</a>
+            </div>
+            
+            <div style="margin-top: 2rem;">
+                <p>支持 Windows 10/11 64位系统</p>
+                <p>需要 PowerShell 5.1 或更高版本</p>
+            </div>
+        </section>
+    </main>
+    
+    <script>
+        // 创建漂浮的爱心
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts');
+            const colors = ['#ff9ff3', '#feca57', '#ff6b6b', '#1dd1a1'];
+            
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '❤';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = Math.random() * 100 + 'vh';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                heart.style.animationDuration = (Math.random() * 10 + 5) + 's';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+                heartsContainer.appendChild(heart);
+            }
+        }
+        
+        // 页面加载后创建爱心
+        window.addEventListener('load', createHearts);
+    </script>
+</body>
+</html>
